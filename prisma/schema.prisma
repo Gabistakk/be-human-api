@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model compras {
+  id              Int      @id @default(autoincrement())
+  FK_Rifa_id      Int?
+  FK_Usuarios_cpf Int?
+  rifa            rifas?     @relation(fields: [FK_Rifa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_COMPRA_1")
+  usuarios        usuarios? @relation(fields: [FK_Usuarios_cpf], references: [cpf], onDelete: Restrict, onUpdate: Restrict, map: "FK_COMPRA_2")
+
+  @@index([FK_Rifa_id], map: "FK_COMPRA_1")
+  @@index([FK_Usuarios_cpf], map: "FK_COMPRA_2")
+}
+
+model ongs {
+  nome               String?      @db.VarChar(255)
+  id                 Int          @id @default(autoincrement())
+  fk_Voluntarios_cpf Int?
+  fk_Rifa_id         Int?
+  fk_Trabalhos_id    Int?
+  voluntarios        voluntarios? @relation(fields: [fk_Voluntarios_cpf], references: [cpf], onDelete: Cascade, onUpdate: Restrict, map: "FK_ONGs_2")
+  rifa               rifas?        @relation(fields: [fk_Rifa_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "FK_ONGs_3")
+  trabalhos          trabalhos?   @relation(fields: [fk_Trabalhos_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "FK_ONGs_4")
+
+  @@index([fk_Voluntarios_cpf], map: "FK_ONGs_2")
+  @@index([fk_Rifa_id], map: "FK_ONGs_3")
+  @@index([fk_Trabalhos_id], map: "FK_ONGs_4")
+}
+
+model rifas {
+  id      Int      @id @default(autoincrement())
+  QR_code String?  @db.Char(1)
+  preco   Float?
+  nome    String?  @db.VarChar(255)
+  compra  compras[] 
+  ongs    ongs[]
+}
+
+model trabalhos {
+  id       Int     @id @default(autoincrement())
+  nome     String? @db.VarChar(255)
+  objetivo String? @db.VarChar(255)
+  ongs     ongs[]
+}
+
+model usuarios {
+  numero String?  @db.VarChar(255)
+  bairro String?  @db.VarChar(255)
+  cidade String?  @db.VarChar(255)
+  nome   String?  @db.VarChar(255)
+  cpf    Int      @id
+  idade  String?  @db.VarChar(255)
+  sexo   Boolean?
+  compra compras[] 
+}
+
+model voluntarios {
+  cpf        Int      @id
+  nome       String?  @db.VarChar(255)
+  cidade     String?  @db.VarChar(255)
+  bairro     String?  @db.VarChar(255)
+  numero     Int?
+  presencial Boolean?
+  ongs       ongs[]
+}
