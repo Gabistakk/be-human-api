@@ -22,7 +22,7 @@ export class VoluntariosService {
   findOne(id: number) {
     return this.prisma.voluntarios.findUnique({
       where: {
-        CPF: id,
+        cpf: id,
       },
     });
   }
@@ -31,14 +31,14 @@ export class VoluntariosService {
     return this.prisma.voluntarios.update({
       data: updateVoluntarioDto,
       where:{
-        CPF: id
+        cpf: id
     }});
   }
 
   remove(id: number) {
     return this.prisma.voluntarios.delete({
       where: {
-        CPF: id,
+        cpf: id,
       },
     });
   }
