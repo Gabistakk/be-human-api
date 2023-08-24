@@ -1,5 +1,5 @@
-#LEMBRAR PARA SETAR!
+# LEMBRAR PARA SETAR!
 
-##usar o npx prisma generate
 
-##npx prisma db push pra criar
+## npx prisma db push pra criar usando xampp 
+### criar os dados ta no postman se n pergunta pro professor usar fake api em python
